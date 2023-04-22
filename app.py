@@ -44,23 +44,27 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    
+    notion_dump(event.message.text)
+    
+    line_bot_api.reply_message(
+        event.reply_token,
+        [TextSendMessage(text=chat_reply(event.message.text))]
+    )
+
+def notion_dump(text):
     jp_time = datetime.now() + timedelta(hours=9)
 
     notion_headers = {"Authorization": f"Bearer {notion_token}",
             "Content-Type": "application/json","Notion-Version": "2021-05-13"}
     notion_body = {"parent": { "database_id": notion_database_id},
         "properties": {
-            "Name": {"title": [{"text": {"content": event.message.text}}]},
+            "Name": {"title": [{"text": {"content": text}}]},
             "Created": {"date": {"start": jp_time.isoformat()}}
         }}
     requests.request('POST', url='https://api.notion.com/v1/pages',\
-        headers=notion_headers, data=json.dumps(notion_body))
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        [TextSendMessage(text=chat_reply(event.message.text))]
-    )
-
+        headers=notion_headers, data=json.dumps(notion_body))    
+    
 def chat_reply(text):
     gpt_headers = {
         "Content-Type": "application/json",
