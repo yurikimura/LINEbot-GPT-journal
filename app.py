@@ -64,9 +64,14 @@ def notion_dump(text):
             "Created": {"date": {"start": jp_time.isoformat()}}
         }}
     requests.request('POST', url='https://api.notion.com/v1/pages',\
-        headers=notion_headers, data=json.dumps(notion_body))    
+        headers=notion_headers, data=json.dumps(notion_body))
+    return
     
 def chat_reply(text):
+    
+    if "返信不要" in text:
+      return
+
     gpt_headers = {
         "Content-Type": "application/json",
     }
