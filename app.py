@@ -59,7 +59,7 @@ def notion_dump(text):
             "Content-Type": "application/json","Notion-Version": "2021-05-13"}
     notion_body = {"parent": { "database_id": notion_database_id},
         "properties": {
-            "Name": {"title": [{"text": {"content": text}}]},
+            "Name": {"title": [{"text": {"content": f"{text}"}}]},
             "Created": {"date": {"start": jp_time.isoformat()}}
         }}
     requests.request('POST', url='https://api.notion.com/v1/pages',\
