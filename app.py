@@ -1,5 +1,5 @@
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import json
 import os
 
@@ -53,7 +53,8 @@ def handle_message(event):
     )
 
 def notion_dump(text):
-    jp_time = datetime.now() + timedelta(hours=9)
+    JST = timezone(timedelta(hours=+9), 'JST')
+    jp_time = datetime.now(JST)
 
     notion_headers = {"Authorization": f"Bearer {notion_token}",
             "Content-Type": "application/json","Notion-Version": "2021-05-13"}
